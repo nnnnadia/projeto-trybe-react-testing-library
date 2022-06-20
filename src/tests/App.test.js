@@ -6,8 +6,11 @@ import renderWithRouter from './renderWithRouter';
 import App from '../App';
 
 describe('Testa o componente <App />', () => {
-  test('O topo da aplicação possui 3 links de navegação com os textos'
-  + ' \'Home\', \'About\' e \'Favorites Pokémons\', nesta ordem.', () => {
+  test('O topo da aplicação possui 3 links de navegação na ordem: \n\t'
+  + '- \'Home\',\n\t'
+  + '- \'About\',\n\t'
+  + '- \'Favorites Pokémons\'\n      '
+  + 'Ao clicar nos links a aplicação é redirecionada para:', () => {
     renderWithRouter(<App />);
     const menuNav = screen.getByRole('navigation');
     const navLinks = within(menuNav).getAllByRole('link');
@@ -23,9 +26,7 @@ describe('Testa o componente <App />', () => {
     const favLink = within(navLinks[2]).getByText(/favorite\spokémons/i);
     expect(favLink).toBeDefined();
   });
-
-  test('Ao clicar no link Home (ou primeiro link) na barra de navegação a '
-  + 'aplicação é redirecionada para a página inicial na URL \'/\'', () => {
+  test('  - Home (ou primeiro link): página inicial - URL => \'/\'', () => {
     const { history } = renderWithRouter(<App />);
     const menuNav = screen.getByRole('navigation');
     const homeLink = within(menuNav).getByRole('link', { name: /home/i });
@@ -38,8 +39,7 @@ describe('Testa o componente <App />', () => {
     expect(sndPath).toBe('/');
   });
 
-  test('Ao clicar no link About (ou segundo link) na barra de navegação a '
-  + 'aplicação é redirecionada para a página About na URL \'/about\'', () => {
+  test('  - About (ou segundo link): página About - URL => \'/about\'', () => {
     const { history } = renderWithRouter(<App />);
     const menuNav = screen.getByRole('navigation');
     const aboutLink = within(menuNav).getByRole('link', { name: /about/i });
@@ -52,9 +52,8 @@ describe('Testa o componente <App />', () => {
     expect(sndPath).toBe('/about');
   });
 
-  test('Ao clicar no link Favorite Pokémons (ou terceiro link) na barra de navegação a '
-  + 'aplicação é redirecionada para a página Favorite Pokémons na URL'
-  + ' \'/favorites\'', () => {
+  test('  - Favorite Pokémons (ou terceiro link): página Favorite'
+  + ' Pokémons - URL => \'/favorites\'', () => {
     const { history } = renderWithRouter(<App />);
     const menuNav = screen.getByRole('navigation');
     const favLink = within(menuNav).getByRole('link', { name: /favorite\spokémons/i });
