@@ -16,7 +16,7 @@ describe('Testa o componente <Pokedex />', () => {
     expect(title).toHaveTextContent(/encountered\spokémons/i);
   });
 
-  test('O botão\'Próximo pokémon\' existe e mostra os pokémons salvos na pokedex'
+  test('O botão \'Próximo pokémon\' existe e mostra os pokémons salvos na pokedex'
   + ', após o último volta pro início', () => {
     const sampleSize = 3;
     const pokemons = makePokemonsSamples(sampleSize);
