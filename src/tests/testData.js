@@ -216,13 +216,26 @@ const getRandomBetween = (min = 0, max = pokemonsLength - 1) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const makePokemonsSamples = (length) => {
+export const makePokemonsSamples = (length) => {
   const indexes = [];
   for (let i = 0; i < length; i += 1) {
-    const randomNumber = getRandomBetween();
-    if (!indexes.includes(randomNumber)) indexes.push(randomNumber);
+    let randomNumber = getRandomBetween();
+    while (indexes.includes(randomNumber)) {
+      randomNumber = getRandomBetween();
+    }
+    indexes.push(randomNumber);
   }
   return indexes.map((index) => pokemons[index]);
 };
 
-export default makePokemonsSamples;
+export const makeIsPokemonFavoriteById = (samples) => {
+  const favoritesById = {};
+  samples.forEach((pokemon) => {
+    if (getRandomBetween(0, 1)) {
+      favoritesById[pokemon.id] = true;
+    } else {
+      favoritesById[pokemon.id] = false;
+    }
+  });
+  return favoritesById;
+};

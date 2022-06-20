@@ -2,7 +2,7 @@ import React from 'react';
 import { screen, render } from '@testing-library/react';
 import renderWithRouter from './renderWithRouter';
 import FavoritePokemons from '../pages/FavoritePokemons';
-import makePokemonsSamples from './testData';
+import { makePokemonsSamples } from './testData';
 
 describe('Testa o componente <FavoritePokemons />', () => {
   test('É exibido na tela \'No favorite pokemon found\' se'
