@@ -1,7 +1,8 @@
 import React from 'react';
-import { screen, render,  } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import renderWithRouter from './renderWithRouter';
 import FavoritePokemons from '../pages/FavoritePokemons';
+import makePokemonsSamples from './testData';
 
 describe('Testa o componente <FavoritePokemons />', () => {
   test('É exibido na tela \'No favorite pokemon found\' se'
@@ -13,57 +14,34 @@ describe('Testa o componente <FavoritePokemons />', () => {
   });
 
   test('E apenas quando nenhum pokémon estiver favoritado', () => {
-    const pikachu = {
-      averageWeight: {
-        measurementUnit: 'kg',
-        value: '6.0',
-      },
-      id: 25,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
-      name: 'Pikachu',
-      type: 'Electric',
-    };
-    renderWithRouter(<FavoritePokemons pokemons={ [pikachu] } />);
+    const pokemon = makePokemonsSamples(1);
+    renderWithRouter(<FavoritePokemons pokemons={ pokemon } />);
     const noFavRegEx = /no\sfavorite\spokemon\sfound/i;
     const noFavNotFound = screen.queryByText(noFavRegEx);
     expect(noFavNotFound).toBeNull();
   });
 
   test('São exibidos todos os cards de pokémons favoritados', () => {
-    const pokemonsList = [{
+    const pokemons = makePokemonsSamples(2);
+    renderWithRouter(<FavoritePokemons pokemons={ pokemons } />);
+    pokemons.forEach(({
+      name,
+      type,
       averageWeight: {
-        measurementUnit: 'kg',
-        value: '6.0',
+        value: weight,
       },
-      id: 25,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
-      name: 'Pikachu',
-      type: 'Electric',
-    }, {
-      averageWeight: {
-        measurementUnit: 'kg',
-        value: '6.9',
-      },
-      id: 23,
-      image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png',
-      name: 'Ekans',
-      type: 'Poison',
-    }];
-    renderWithRouter(<FavoritePokemons pokemons={ pokemonsList } />);
-    const pikachuName = screen.getByText(/pikachu/i);
-    expect(pikachuName).toHaveTextContent(pokemonsList[0].name);
-    const pikachuType = screen.getByText(/electric/i);
-    expect(pikachuType).toHaveTextContent(pokemonsList[0].type);
-    const pokemonsWeights = screen.getAllByText(/average\sweight/i);
-    expect(pokemonsWeights[0]).toHaveTextContent(/6.0 kg/i);
-    const pikachuImg = screen.getByAltText(/pikachu\ssprite/i);
-    expect(pikachuImg).toHaveAttribute('src', pokemonsList[0].image);
-    const ekansName = screen.getByText(/ekans/i);
-    expect(ekansName).toHaveTextContent(pokemonsList[1].name);
-    const ekansType = screen.getByText(/poison/i);
-    expect(ekansType).toHaveTextContent(pokemonsList[1].type);
-    expect(pokemonsWeights[1]).toHaveTextContent(/6.9 kg/i);
-    const ekansImg = screen.getByAltText(/ekans\ssprite/i);
-    expect(ekansImg).toHaveAttribute('src', pokemonsList[1].image);
+      image,
+    }, i) => {
+      const screenName = screen.getByText(name);
+      expect(screenName).toBeInTheDocument();
+      const screenType = screen.queryAllByText(type);
+      expect(screenType.length).toBeGreaterThanOrEqual(1);
+      expect(screenType.length).toBeLessThanOrEqual(pokemons.length);
+      const pokemonsWeights = screen.getAllByText(/average\sweight/i);
+      expect(pokemonsWeights[i]).toHaveTextContent(weight);
+      const altTextRegEx = new RegExp(`${name}\\ssprite`, 'i');
+      const screenImg = screen.getByAltText(altTextRegEx);
+      expect(screenImg).toHaveAttribute('src', image);
+    });
   });
 });
