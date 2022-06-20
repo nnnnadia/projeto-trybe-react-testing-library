@@ -2,7 +2,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
-import Pokemon from '../components/Pokemon';
+import { Pokemon } from '../components';
 import Routes from '../routes';
 import { makePokemonsSamples } from './testData';
 
